@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+
+<script>
+function swipe(img_id)
+{
+   var largeImage = document.getElementById(img_id);
+   var url=largeImage.getAttribute('src');
+	window.open(url,'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+}
+</script>
+
+<div>
+<img id='largeImage1' width="13%" src="img\Warrior_Lady_of_the_Wasteland.png" onClick='swipe("largeImage1");' >
+<img id='largeImage2' width="13%" src="img\Command_Knight.png" onClick='swipe("largeImage2");' >
+<img id='largeImage3' width="13%" src="img\Dark_Blade.png" onClick='swipe("largeImage3");' >
+<img id='largeImage4' width="13%" src="img\Gearfried_the_Iron_Knight.png" onClick='swipe("largeImage4");' >
+<img id='largeImage5' width="13%" src="img\Obnoxious_Celtic_Guard.png" onClick='swipe("largeImage5");' >
+<img id='largeImage6' width="13%" src="img\Swift_Gaia_the_Fierce_Knight.png" onClick='swipe("largeImage6");' >
+<img id='largeImage7' width="13%" src="img\back.png" onClick='swipe("largeImage7");' >
+</div>
+
+</body>
+</html>

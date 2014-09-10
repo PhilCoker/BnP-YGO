@@ -1,0 +1,53 @@
+div div
+{
+	width:166px;
+	height:229px;
+	float:left;
+	background-color:#EEEEEE;
+	border: 1px solid black;
+}
+
+#M1_zone, #M2_zone, #M3_zone, #M4_zone, #M5_zone
+{
+	background-color:#FF0000;
+}
+
+#ST1_zone, #ST2_zone, #ST3_zone, #ST4_zone, #ST5_zone
+{
+	background-color:#00FF00;
+}
+
+#graveyard_zone
+{
+	background-color:#CCCCCC;
+}
+
+#extra_deck_zone
+{
+	background-color:#FF00FF;
+}
+
+#field_zone
+{
+	background-color:#00FF99;
+}
+
+#deck_zone
+{
+	background-color:#FF9900;
+}
+
+#board
+{
+	width:1176px;
+	height:472px;
+}
+
+img
+{
+	width:114px;
+	height:167px;
+	display:block;
+	margin: 0 auto;
+	margin-top:26px;
+}

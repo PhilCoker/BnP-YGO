@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Yu-Gi-Oh!</title>
+<link rel="stylesheet" type="text/css" href={{ url_for('static', filename="gameboard.css") }} />
+<link rel="icon" type="image/png" href={{ url_for('static', filename="favicon.png") }} />
+</style>
+
+</head>
+<body>
+<script>
+function swipe(img_id)
+{
+	var largeImage = document.getElementById(img_id);
+	var url=largeImage.getAttribute('src');
+	window.open(url,'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+}
+</script>
+Life Points: 4000
+	<div id="board">
+		<div id="field_zone"><img src="http://static.api5.studiobebop.net/ygo_data/card_images/Magical_Citadel_of_Endymion.jpg" id="field_card" onClick='swipe("field_card");' ><img src="http://www.nigeltomm.com/images/orange_square_nigel_tomm_m.jpg" style="float:left;position:relative;width:10px;height:10px;top:-212px;left:10px"><img src="http://www.nigeltomm.com/images/orange_square_nigel_tomm_m.jpg" style="float:left;position:relative;width:10px;height:10px;top:-212px;left:20px"><img src="http://www.nigeltomm.com/images/orange_square_nigel_tomm_m.jpg" style="float:left;position:relative;width:10px;height:10px;top:-212px;left:30px">
+		</div>
+		<div id="M1_zone"><img src="" >
+		</div>
+		<div id="M2_zone"><img src="" >
+		</div>
+		<div id="M3_zone"><img src="" >
+		</div>
+		<div id="M4_zone"><img src="" >
+		</div>
+		<div id="M5_zone"><img src="" >
+		</div>
+		<div id="graveyard_zone"><img src="" >
+		</div>
+	
+		<div id="extra_deck_zone"><img src="http://static.api5.studiobebop.net/ygo_data/card_images/Magicians_Unite.jpg" >
+		</div>
+		<div id="ST1_zone"><img src="" >
+		</div>
+		<div id="ST2_zone"><img src="" >
+		</div>
+		<div id="ST3_zone"><img src="http://images.wikia.com/yugioh/images/archive/e/e5/20080209143844!Back-EN.png" id="ST3_card" onClick='swipe("ST3_card");'><img src="http://www.nigeltomm.com/images/orange_square_nigel_tomm_m.jpg" style="float:left;position:relative;width:10px;height:10px;top:-212px;left:10px">
+		</div>
+		<div id="ST4_zone"><img src="http://static.api5.studiobebop.net/ygo_data/card_images/Enemy_Controller.jpg" id="ST4_card" onClick='swipe("ST4_card");'>
+		</div>
+		<div id="ST5_zone"><img src="" >
+		</div>
+		<div id="deck_zone"><img src="http://images.wikia.com/yugioh/images/archive/e/e5/20080209143844!Back-EN.png" >
+		</div>
+		<br>
+	</div>
+	<div id="hand">
+		<img src="http://static.api5.studiobebop.net/ygo_data/card_images/Endymion,_the_Master_Magician.jpg" style="float:left;position:relative;left:0px" id="H0_card" onClick='swipe("H0_card");' >
+		
+	</div>
+	<div>
+	<form method='post'>Enter text:<input type='text' name='P1_command' autofocus><input type='submit' value='Go!'>
+	</div>
+</body>
+</html>
