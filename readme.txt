@@ -1,3 +1,5 @@
+Version 1.1
+
 P1_NAME: Name of player 1
 P2_NAME: Name of player 2
 P1_DECK_NAME: Name of the deck that player 1 is using
@@ -17,5 +19,3 @@ P2_GRAVE: The cards in player 1's Graveyard, with the first number being the fir
 P1_FIELD: The card in player 1's Field Card Zone
 P2_FIELD: The card in player 2's Field Card Zone
 TURN: Whose turn it is, either P1 or P2
-
-So far the extra deck and spell counters are not implemented, nor are positions of cards in monster/spell zones

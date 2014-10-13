@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Yu-Gi-Oh!</title>
+<link rel="stylesheet" type="text/css" href={{ url_for('static', filename="gameboard.css") }} />
+<link rel="icon" type="image/png" href={{ url_for('static', filename="favicon.png") }} />
+</style>
+</head>
+<body>
+<script>
+function swipe(img_id)
+{
+	var largeImage = document.getElementById(img_id);
+	var url=largeImage.getAttribute('src2');
+	window.open(url,'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+}
+function look_at(area)
+{
+	window.open( '/play?name=Brad Test&player=P2&view='+area, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1' );
+}
+</script>
+Life Points: 8000
+	<div id="board">
+		<div id="field_zone"><img src="" src2=""  >
+		</div>
+		<div id="M1_zone"><img src="" src2=""  >
+		</div>
+		<div id="M2_zone"><img src="" src2=""  >
+		</div>
+		<div id="M3_zone"><img src="" src2=""  >
+		</div>
+		<div id="M4_zone"><img src="" src2=""  >
+		</div>
+		<div id="M5_zone"><img src="" src2=""  >
+		</div>
+		<div id="graveyard_zone"><img src="" src2="" onClick="look_at('graveyard');" >
+		</div>
+		<div id="banished_zone"><img src="" onClick="look_at('banished');" >
+		</div>
+	
+		<div id="extra_deck_zone"><img src="" onClick="look_at('extra');" >
+		</div>
+		<div id="ST1_zone"><img src="" src2=""  >
+		</div>
+		<div id="ST2_zone"><img src="" src2=""  >
+		</div>
+		<div id="ST3_zone"><img src="" src2=""  >
+		</div>
+		<div id="ST4_zone"><img src="" src2=""  >
+		</div>
+		<div id="ST5_zone"><img src="" src2=""  >
+		</div>
+		<div id="deck_zone"><img src="http://images.wikia.com/yugioh/images/archive/e/e5/20080209143844!Back-EN.png" onClick="look_at('deck');" >
+		</div>
+		<br>
+	</div>
+	<div id="hand">
+		<img src="http://static.api3.studiobebop.net/ygo_data/card_images/Fissure.jpg" src2="http://static.api3.studiobebop.net/ygo_data/card_images/Fissure.jpg" style="float:left;position:relative;left:0px" id="H1_card" onClick='swipe("H1_card");' >
+		<img src="http://static.api3.studiobebop.net/ygo_data/card_images/Magical_Blast.jpg" src2="http://static.api3.studiobebop.net/ygo_data/card_images/Magical_Blast.jpg" style="float:left;position:relative;left:-50px" id="H2_card" onClick='swipe("H2_card");' >
+		<img src="http://static.api3.studiobebop.net/ygo_data/card_images/Twister.jpg" src2="http://static.api3.studiobebop.net/ygo_data/card_images/Twister.jpg" style="float:left;position:relative;left:-100px" id="H3_card" onClick='swipe("H3_card");' >
+		<img src="http://static.api3.studiobebop.net/ygo_data/card_images/Hannibal_Necromancer.jpg" src2="http://static.api3.studiobebop.net/ygo_data/card_images/Hannibal_Necromancer.jpg" style="float:left;position:relative;left:-150px" id="H4_card" onClick='swipe("H4_card");' >
+		<img src="http://static.api3.studiobebop.net/ygo_data/card_images/Royal_Magical_Library.jpg" src2="http://static.api3.studiobebop.net/ygo_data/card_images/Royal_Magical_Library.jpg" style="float:left;position:relative;left:-200px" id="H5_card" onClick='swipe("H5_card");' >
+		
+	</div>
+	<div>
+	<form method='post'>Enter text:<input type='text' name='P2_command' autofocus><input type='submit' value='Go!'></form>
+	</div>
+</body>
+</html>

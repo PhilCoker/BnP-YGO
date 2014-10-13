@@ -6,48 +6,72 @@ import socket
 import time
 import game_util
 
-DEBUG = True
-
 #Represents a game of Yu-Gi-Oh between two players.
 class Game:
 
-	#The extension of the game file
-	game_ext = '.g.txt'
-
 	def __init__(self, game_name='test' ):
 		self.game_name = game_name
-		self.tag_dict = self.load_game( game_name )
+		self.tag_dict = game_util.load_game( game_name )
 		self.undo = []
 		self.history_u = []
 		self.history_g = []
 		for p in ['P1', 'P2']:
-			self.write_html(p)
+			game_util.write_html(self, p)
 
 	#A bunch of getters to abstract how the data is stored
 	def get_deck( self, player ):
-		split = self.tag_dict[player+'_DECK'].split(';')
+		try:
+			split = self.tag_dict[player+'_DECK'].split(';')
+		except KeyError:
+			return []
 		return [] if split == [''] else split
 	def get_hand( self, player ):
-		split = self.tag_dict[player+'_HAND'].split(';')
+		try:
+			split = self.tag_dict[player+'_HAND'].split(';')
+		except KeyError:
+			return []
 		return [] if split == [''] else split
 	def get_monsters( self, player ):
-		ret_monsters = self.tag_dict[player+'_M'].split(';')
+		ret_monsters = []
+		try:
+			ret_monsters = self.tag_dict[player+'_M'].split(';')
+		except KeyError:
+			pass
 		while len(ret_monsters) < 5:
 			ret_monsters.append('')
 		return ret_monsters
 	def get_spells( self, player ):
-		ret_spells = self.tag_dict[player+'_S'].split(';')
+		ret_spells = []
+		try:
+			ret_spells = self.tag_dict[player+'_S'].split(';')
+		except KeyError:
+			pass
 		while len(ret_spells) < 5:
 			ret_spells.append('')
 		return ret_spells
 	def get_graveyard( self, player ):
-		split = self.tag_dict[player+'_GRAVE'].split(';')
+		try:
+			split = self.tag_dict[player+'_GRAVE'].split(';')
+		except KeyError:
+			return []
 		return [] if split == [''] else split
 	def get_extra( self, player ):
-		split = self.tag_dict[player+'_EXTRA'].split(';')
+		try:
+			split = self.tag_dict[player+'_EXTRA'].split(';')
+		except KeyError:
+			return []
 		return [] if split == [''] else split
 	def get_field( self, player ):
-		split = self.tag_dict[player+'_FIELD'].split(';')
+		try:
+			split = self.tag_dict[player+'_FIELD'].split(';')
+		except KeyError:
+			return []
+		return [] if split == [''] else split
+	def get_banished( self, player ):
+		try:
+			split = self.tag_dict[player+'_BANISHED'].split(';')
+		except KeyError:
+			return []
 		return [] if split == [''] else split
 	def get_deck_name( self, player ):
 		return self.tag_dict[player+'_DECK_NAME']
@@ -97,26 +121,14 @@ class Game:
 		for f in field_list:
 			new_field += f + ';'
 		self.tag_dict[player+'_FIELD'] = new_field[:-1]
+	def set_banished( self, banished_list, player ):
+		new_banished = ''
+		for b in banished_list:
+			new_banished += b + ';'
+		self.tag_dict[player+'_BANISHED'] = new_banished[:-1]
 	def set_LP( self, new_LP, player ):
 		self.tag_dict[player+'_LP'] = new_LP
 	
-	#Loads a game based on a certain format
-	def load_game( self, gname='test' ):
-		dict = {}
-		with open( 'game\\' + gname + self.game_ext, 'r' ) as file:
-			for line in file:
-				#Ignore comments
-				if line[0] != '#':
-					s = line.split('=')
-					dict[ s[0] ] = s[1].replace('\n', '')
-		return dict
-
-	#Writes the game state into a file in a certain format
-	def save_game( self, gname='unnamed' ):
-		with open( 'game\\' + gname + self.game_ext, 'w' ) as file:
-			for k in self.tag_dict.iterkeys():
-				file.write( k + '=' + self.tag_dict[k] + '\n' )
-
 	#Shuffles the deck of the given player
 	def shuffle( self, player ):
 		if player in ('P1', 'P2'):
@@ -153,6 +165,7 @@ class Game:
 			print 'Found bad player: {}'.format(player)
 	
 	#Removes a card from the top of the deck and places it on top of the graveyard
+	#E.g. mill( 5, 'P1' ) will make player one mill 5 cards
 	def mill( self, times, player ):
 		for i in range(times):
 			pulled = self.pull( 'd1', player )
@@ -217,11 +230,11 @@ class Game:
 				pulled_split = pulled.split(':')
 				#Change the position of the card
 				pulled_split[1] = new_pos
-				self.put( pulled_split[0], field_slot, player, pulled_split[1:-1] )
+				self.put( pulled_split[0], field_slot, player, pulled_split[1:] )
 			else:
 				print 'Got back none type in flip.'
 		else:
-			print 'Bad new position in flip.'
+			print 'Bad new position in flip: {}.'.format( new_pos )
 	
 	#Sets/adjusts the number of tokens on a field card
 	def token( self, field_slot, mode, amount, player ):
@@ -243,7 +256,19 @@ class Game:
 				print 'Got back none type in token.'
 		else:
 			print 'Bad mode in token: {}'.format(mode)
-				
+	
+	#Banishes a card
+	def banish( self, field_slot, player ):
+		pulled = self.pull( field_slot, player )
+		if pulled != None:
+			if pulled != '':
+				banished = self.get_banished(player)
+				banished_size = len(banished)
+				self.put( pulled.split(':')[0], 'b' + str(banished_size+1), player )
+			else:
+				print 'No card is in play at field slot {} in banish.'.format( field_slot )
+		else:
+			print 'Got back none type in banish.'
 	
 	#Switches between player one and two
 	def switch_turn( self ):
@@ -254,28 +279,13 @@ class Game:
 		else:
 			print 'Found bad player: {}'.format( self.tag_dict['TURN'] )
 	
-	#Returns the URL path of the specified card number and player
-	def get_card_path( self, cardnum, player ):
-		if cardnum > 0:
-			count = 1
-			with open( 'deck\\' + self.get_deck_name(player) + '.d.txt', 'r' ) as deck_file:
-				while count < cardnum:
-					deck_file.readline()
-					count = count + 1
-				found = deck_file.readline().replace('\n', '')
-				return game_util.get_image_path( found )
-
-	def write_html( self, player ):
-		with open( 'templates\\{}_{}.html'.format(self.game_name, player), 'w' ) as file:
-			file.write( game_util.get_board_html( self, player ) )
-	
 	#Big kahoona!
 	#Returns True if successful, false otherwise.
 	def send( self, msg, player ):
 		good_msg = 'OK'
 		msg_parsed = msg.split(' ')
 		main = msg_parsed[0]
-		if main in ['draw', 'refresh', 'discard', 'mill', 'save', 'play', 'spin', 'lp', 'destroy', 'shuffle', 'return', 'flip', 'token']:
+		if main in ['draw', 'refresh', 'discard', 'mill', 'save', 'play', 'spin', 'lp', 'destroy', 'shuffle', 'return', 'flip', 'token', 'banish', 'tell']:
 			if main == 'draw':
 				if len(msg_parsed) == 1:
 					self.draw( player )
@@ -302,9 +312,9 @@ class Game:
 					return False
 			elif main == 'save':
 				if len(msg_parsed) == 1:
-					self.save_game()
+					game_util.save_game(self.tag_dict)
 				elif len(msg_parsed) == 2:
-					self.save_game( msg_parsed[1] )
+					game_util.save_game( self.tag_dict, msg_parsed[1] )
 				else:
 					print 'Bad save statement. Try "save" to save to a default file, or "save x" to save to x.g.txt.'
 					return False
@@ -356,7 +366,15 @@ class Game:
 				else:
 					print 'Bad token statement. Try "token f1 set 1" to make your field card have one token, or "token m1 adjust -1" to remove one token from your first monster.'
 					return False
-			self.write_html(player)
+			elif main == 'banish':
+				if len(msg_parsed) == 2:
+					self.banish( msg_parsed[1], player )
+				else:
+					print 'Bad banish statement. Try "banish m1" to banish the first monster.'
+					return False
+			elif main == 'tell':
+				None
+			game_util.write_html(self, player)
 			return True
 		else:
 			print 'What?'
@@ -372,7 +390,7 @@ class Game:
 		if num <= 0:
 			print 'Bad slot in pull: {}'.format(num)
 			return None
-		if area in ['h', 'd', 'm', 's', 'g', 'f']:
+		if area in ['h', 'd', 'm', 's', 'g', 'f', 'b']:
 			#Remove card from hand
 			if area == 'h':
 				hand = self.get_hand(player)
@@ -431,6 +449,18 @@ class Game:
 				return_card = field.pop()
 				self.set_field(field, player)
 				return return_card
+			#Remove card from banished zone
+			elif area == 'b':
+				banished = self.get_banished(player)
+				if num > len(banished):
+					print 'Bad slot on banished pull: {}'.format( num )
+					return None
+				else:
+					return_card = banished.pop(num-1)
+					self.set_banished( banished, player )
+					return return_card
+		else:
+			print 'Bad area on pull: {}'.format( area )
 	
 	#Puts a card into an area, whose implementation varies on the area
 	#Returns None if there is an error, such as bad code or player
@@ -442,7 +472,7 @@ class Game:
 		if num <= 0:
 			print 'Number zero or less in put method.'
 			return None
-		if area in ['h', 'd', 'g', 'm', 's', 'f']:
+		if area in ['h', 'd', 'g', 'm', 's', 'f', 'b']:
 			if area == 'h':
 				hand = self.get_hand(player)
 				if num <= len(hand)+1:
@@ -530,6 +560,15 @@ class Game:
 					print 'Already a field card in play.'
 					return None
 				self.set_field( field, player )
+			elif area == 'b':
+				banished = self.get_banished(player)
+				if num <= len(banished)+1:
+					lside = banished[:num-1]
+					lside.append(card)
+					rside = banished[num-1:]
+					lside.extend(rside)
+				
+					self.set_banished( lside, player )
 					
 		else:
-				print 'Bad area! {}'.format( area )
+				print 'Bad area on put: {}'.format( area )

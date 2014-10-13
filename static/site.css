@@ -1,0 +1,20 @@
+#g {
+	float: left;
+	border: 2px solid #000000;
+	padding: 10px;
+	background-color: #98AFC7;
+}
+
+a:link {
+    color: #303030;
+	text-decoration: none;
+}
+
+a:visited {
+    color: #303030;
+}
+
+a:hover {
+    color: #FF0000;
+	text-decoration: underline;
+}

@@ -12,6 +12,10 @@ function swipe(img_id)
    var url=largeImage.getAttribute('src');
 	window.open(url,'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
 }
+function swipe2()
+{
+	window.open("test2.html")
+}
 </script>
 
 <div>
@@ -22,6 +26,7 @@ function swipe(img_id)
 <img id='largeImage5' width="13%" src="img\Obnoxious_Celtic_Guard.png" onClick='swipe("largeImage5");' >
 <img id='largeImage6' width="13%" src="img\Swift_Gaia_the_Fierce_Knight.png" onClick='swipe("largeImage6");' >
 <img id='largeImage7' width="13%" src="img\back.png" onClick='swipe("largeImage7");' >
+<input type='submit' value='Go!' onClick="swipe2()">
 </div>
 
 </body>
